@@ -31,7 +31,7 @@ public final class ToyBox {
                 "Pop-Up Book",
                 "Generic Uncopyrighted Mouse",
                 "Finger Paint",
-                "Sock Monkey",
+                "Foci",
                 "Microscope Set",
                 "Beach Ball",
                 "BB Gun",
