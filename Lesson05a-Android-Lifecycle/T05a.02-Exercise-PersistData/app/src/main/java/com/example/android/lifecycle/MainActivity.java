@@ -1,6 +1,7 @@
 package com.example.android.lifecycle;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -9,13 +10,11 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     /*
-     * This tag will be used for logging. It is best practice to use the class's name using
-     * getSimpleName as that will greatly help to identify the location from which your logs are
-     * being posted.
-     */
+         * This tag will be used for logging. It is best practice to use the class's name using
+         * getSimpleName as that will greatly help to identify the location from which your logs are
+         * being posted.
+         */
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    // TODO (1) Create a key String called LIFECYCLE_CALLBACKS_TEXT_KEY
 
     /* Constant values for the names of each respective lifecycle callback */
     private static final String ON_CREATE = "onCreate";
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ON_RESTART = "onRestart";
     private static final String ON_DESTROY = "onDestroy";
     private static final String ON_SAVE_INSTANCE_STATE = "onSaveInstanceState";
+    private static final String LIFECYCLE_CALLBACKS_TEXT_KEY = "LIFECYCLE_CALLBACKS_TEXT_KEY";
 
     /*
      * This TextView will contain a running log of every lifecycle callback method called from this
@@ -49,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         mLifecycleDisplay = (TextView) findViewById(R.id.tv_lifecycle_events_display);
 
-        // TODO (6) If savedInstanceState is not null and contains LIFECYCLE_CALLBACKS_TEXT_KEY, set that text on our TextView
-
+        if(savedInstanceState != null)
+            if(savedInstanceState.containsKey(LIFECYCLE_CALLBACKS_TEXT_KEY))
+                mLifecycleDisplay.setText(savedInstanceState.getCharSequence(LIFECYCLE_CALLBACKS_TEXT_KEY));
         logAndAppend(ON_CREATE);
     }
 
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         logAndAppend(ON_RESTART);
     }
-    
+
     /**
      * The final call you receive before your activity is destroyed. This can happen either because
      * the activity is finishing (someone called finish() on it, or because the system is
@@ -133,14 +134,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         logAndAppend(ON_DESTROY);
     }
 
-    // TODO (2) Override onSaveInstanceState
-    // Do steps 3 - 5 within onSaveInstanceState
-    // TODO (3) Call super.onSaveInstanceState
-    // TODO (4) Call logAndAppend with the ON_SAVE_INSTANCE_STATE String
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        logAndAppend(ON_SAVE_INSTANCE_STATE);
+        String textViewState = mLifecycleDisplay.getText().toString();
+        outState.putCharSequence(LIFECYCLE_CALLBACKS_TEXT_KEY,textViewState);
+    }
+
     // TODO (5) Put the text from the TextView in the outState bundle
 
     /**
