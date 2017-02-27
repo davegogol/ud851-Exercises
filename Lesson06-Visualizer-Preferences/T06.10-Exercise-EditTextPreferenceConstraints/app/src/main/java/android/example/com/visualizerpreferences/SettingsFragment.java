@@ -23,13 +23,14 @@ import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.widget.Toast;
 
-// TODO (1) Implement OnPreferenceChangeListener
+// COMPLETED (1) Implement OnPreferenceChangeListener
 public class SettingsFragment extends PreferenceFragmentCompat implements
-        OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -51,7 +52,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 setPreferenceSummary(p, value);
             }
         }
-        // TODO (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
+        Preference preference = findPreference(getString(R.string.pref_size_key));
+        preference.setOnPreferenceChangeListener(this);
+        // COMPLETED (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
     }
 
     @Override
@@ -106,4 +109,31 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
+
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Toast toast = Toast.makeText(getContext(), "Must be a number between 1 and 3",
+                Toast.LENGTH_SHORT);
+
+        String sizeKey = getString(R.string.pref_size_key);
+        if(preference.getKey().equals(sizeKey)){
+            String newSizeValue = (String) newValue;
+            try {
+                try {
+                    Float newFloatSizeValue = Float.parseFloat(newSizeValue);
+                    if (newFloatSizeValue > 3 || newFloatSizeValue < 1)
+                        throw new IllegalArgumentException();
+                    else
+                        return true;
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException();
+                }
+            }catch (IllegalArgumentException e){
+                toast.show();
+            }
+        }
+        return false;
+    }
+
 }
