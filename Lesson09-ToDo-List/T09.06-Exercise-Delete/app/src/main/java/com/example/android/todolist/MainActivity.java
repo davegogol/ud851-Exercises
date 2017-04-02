@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int TASK_LOADER_ID = 0;
 
-    // Member variables for the adapter and RecyclerView
+    // Member variables for the adapter and RecycldeerView
     private CustomCursorAdapter mAdapter;
     RecyclerView mRecyclerView;
 
